@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Chess Wars</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%;
+      background: #1a1a2e; overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      color: #ffffff;
+    }
+    #game-container {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      touch-action: none; user-select: none;
+      -webkit-user-select: none; -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    canvas { display: block; }
+
+    /* ── UI Overlay ── */
+    #game-ui-layer {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; display: none;
+      z-index: 10;
+    }
+    #game-ui-layer.active { display: block; }
+    #game-ui-layer * { pointer-events: auto; }
+
+    /* ── Top Bar ── */
+    .top-bar {
+      position: absolute; top: 4px; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 4px 12px; height: 32px;
+      font-size: 12px; font-weight: 700;
+      z-index: 11;
+    }
+    .top-bar .phase { color: #ffcc00; }
+    .top-bar .turn { color: #ffffff; }
+    .top-bar .player { color: #aaaaaa; }
+    .top-bar .player.white { color: #ffffff; }
+    .top-bar .player.black { color: #888888; }
+
+    /* ── Side Panel ── */
+    .side-panel {
+      position: absolute; right: 8px; top: 44px; bottom: 8px;
+      width: 240px; display: flex; flex-direction: column;
+      gap: 6px; z-index: 11;
+    }
+    .gold-card {
+      background: rgba(22, 33, 62, 0.92); border: 1px solid #2a3f5f;
+      border-radius: 6px; padding: 8px 10px;
+      text-align: center; font-size: 14px; font-weight: 700;
+      color: #ffcc00;
+    }
+    .shop-grid {
+      display: flex; flex-direction: column; gap: 4px;
+      overflow-y: auto; max-height: 200px; padding-right: 4px;
+    }
+    .shop-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; min-height: 44px; padding: 6px 10px;
+      background: rgba(26, 26, 62, 0.92); border: 1px solid #3a3a6e;
+      border-radius: 6px; color: #ffffff; font-size: 13px;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .shop-btn:active { background: rgba(42, 42, 94, 0.95); transform: scale(0.97); }
+    .shop-btn.deploying { background: #0f6f3f; border-color: #00ff88; }
+    .shop-btn.unaffordable { background: #111122; border-color: #222244; opacity: 0.4; cursor: not-allowed; }
+    .shop-btn .name { font-weight: 600; }
+    .shop-btn .cost { color: #ffcc00; font-size: 12px; }
+    .shop-btn .icon { font-size: 22px; }
+
+    .end-turn-btn {
+      width: 100%; min-height: 44px;
+      background: rgba(15, 52, 96, 0.92); border: 1px solid #4a6fa5;
+      border-radius: 6px; color: #ffffff; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .end-turn-btn:active { background: rgba(26, 74, 128, 0.95); transform: scale(0.97); }
+
+    .hint-text {
+      font-size: 11px; color: #88aacc; text-align: center;
+      line-height: 1.4; padding: 0 4px;
+    }
+    .message-overlay {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-size: 20px; font-weight: 700; color: #ffcc00;
+      text-shadow: 0 0 6px #000, 0 0 12px #000;
+      pointer-events: none; opacity: 0; transition: opacity 0.3s;
+      text-align: center; z-index: 20;
+    }
+
+    /* ── Portrait: panel to bottom ── */
+    @media (orientation: portrait) {
+      .side-panel {
+        right: 8px; left: 8px; top: auto; bottom: 6px;
+        width: auto; max-height: 240px;
+      }
+      .shop-grid {
+        flex-direction: row; flex-wrap: wrap; gap: 4px;
+      }
+      .shop-btn {
+        flex: 1 1 auto; min-width: 100px; min-height: 40px;
+        font-size: 12px; padding: 4px 8px;
+      }
+      .shop-btn .icon { font-size: 18px; }
+      .end-turn-btn { min-height: 40px; font-size: 13px; }
+    }
+
+    @media (max-width: 500px) {
+      .side-panel { right: 4px; left: 4px; }
+      .shop-btn .name { font-size: 11px; }
+      .gold-card { font-size: 12px; padding: 6px 8px; }
+    }
+  </style>
+  <script type="module" crossorigin src="/chess-wars/assets/index-DFDU-Hyl.js"></script>
+</head>
+<body>
+  <div id="game-container"></div>
+
+  <div id="game-ui-layer">
+    <div class="top-bar">
+      <span id="ui-phase" class="phase">SETUP PHASE</span>
+      <span id="ui-turn" class="turn">Setup</span>
+      <span id="ui-player" class="player white">WHITE</span>
+    </div>
+
+    <div class="side-panel">
+      <div id="ui-gold-card" class="gold-card">Gold: 800</div>
+      <div class="shop-grid" id="shop-grid">
+        <button class="shop-btn" data-type="pawn"><span class="name">Pawn</span><span class="cost">100g</span><span class="icon">&#9823;</span></button>
+        <button class="shop-btn" data-type="knight"><span class="name">Knight</span><span class="cost">300g</span><span class="icon">&#9822;</span></button>
+        <button class="shop-btn" data-type="bishop"><span class="name">Bishop</span><span class="cost">300g</span><span class="icon">&#9821;</span></button>
+        <button class="shop-btn" data-type="rook"><span class="name">Rook</span><span class="cost">500g</span><span class="icon">&#9820;</span></button>
+        <button class="shop-btn" data-type="queen"><span class="name">Queen</span><span class="cost">900g</span><span class="icon">&#9819;</span></button>
+      </div>
+      <button id="end-turn-btn" class="end-turn-btn">End Turn</button>
+      <p id="ui-hint" class="hint-text">Select a piece to move/attack<br>or buy a new piece to deploy</p>
+    </div>
+
+    <div id="message-overlay" class="message-overlay"></div>
+  </div>
+
+</body>
+</html>
