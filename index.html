@@ -4,12 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Chess Wars</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100%; height: 100%;
-      background: #1a1a2e; overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #0f0f1b; overflow: hidden;
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       color: #ffffff;
     }
     #game-container {
@@ -31,92 +34,211 @@
 
     /* ── Top Bar ── */
     .top-bar {
-      position: absolute; top: 4px; left: 0; right: 0;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 4px 12px; height: 32px;
-      font-size: 12px; font-weight: 700;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 24px);
+      max-width: 800px;
+      background: rgba(10, 15, 30, 0.45);
+      backdrop-filter: blur(12px) saturate(160%);
+      -webkit-backdrop-filter: blur(12px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      height: 38px;
+      font-size: 13px;
+      font-weight: 700;
       z-index: 11;
     }
-    .top-bar .phase { color: #ffcc00; }
+    .top-bar .phase { color: #ffcc00; letter-spacing: 0.5px; }
     .top-bar .turn { color: #ffffff; }
     .top-bar .player { color: #aaaaaa; }
-    .top-bar .player.white { color: #ffffff; }
-    .top-bar .player.black { color: #888888; }
+    .top-bar .player.white { color: #ffffff; text-shadow: 0 0 8px rgba(255,255,255,0.3); }
+    .top-bar .player.black { color: #8899aa; text-shadow: 0 0 8px rgba(136,153,170,0.3); }
 
     /* ── Side Panel ── */
     .side-panel {
-      position: absolute; right: 8px; top: 44px; bottom: 8px;
-      width: 240px; display: flex; flex-direction: column;
-      gap: 6px; z-index: 11;
+      position: absolute;
+      right: 8px;
+      top: 60px;
+      bottom: 8px;
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 11;
+      background: rgba(10, 15, 30, 0.4);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     .gold-card {
-      background: rgba(22, 33, 62, 0.92); border: 1px solid #2a3f5f;
-      border-radius: 6px; padding: 8px 10px;
-      text-align: center; font-size: 14px; font-weight: 700;
+      background: rgba(255, 204, 0, 0.08);
+      border: 1px solid rgba(255, 204, 0, 0.2);
+      border-radius: 10px;
+      padding: 8px 10px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
       color: #ffcc00;
+      text-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
     .shop-grid {
-      display: flex; flex-direction: column; gap: 4px;
-      overflow-y: auto; max-height: 200px; padding-right: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+      max-height: 220px;
+      padding-right: 4px;
     }
+    .shop-grid::-webkit-scrollbar {
+      width: 4px;
+    }
+    .shop-grid::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 2px;
+    }
+    .shop-grid::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+    }
+    .shop-grid::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
     .shop-btn {
-      display: flex; align-items: center; justify-content: space-between;
-      width: 100%; min-height: 44px; padding: 6px 10px;
-      background: rgba(26, 26, 62, 0.92); border: 1px solid #3a3a6e;
-      border-radius: 6px; color: #ffffff; font-size: 13px;
-      cursor: pointer; transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      min-height: 48px;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
-    .shop-btn:active { background: rgba(42, 42, 94, 0.95); transform: scale(0.97); }
-    .shop-btn.deploying { background: #0f6f3f; border-color: #00ff88; }
-    .shop-btn.unaffordable { background: #111122; border-color: #222244; opacity: 0.4; cursor: not-allowed; }
+    .shop-btn:hover:not(.unaffordable) {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    .shop-btn:active:not(.unaffordable) {
+      background: rgba(255, 255, 255, 0.06);
+      transform: scale(0.97);
+    }
+    .shop-btn.deploying {
+      background: rgba(15, 111, 63, 0.35);
+      border-color: rgba(0, 255, 136, 0.5);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+    .shop-btn.unaffordable {
+      background: rgba(255, 255, 255, 0.01);
+      border-color: rgba(255, 255, 255, 0.03);
+      opacity: 0.35;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
     .shop-btn .name { font-weight: 600; }
-    .shop-btn .cost { color: #ffcc00; font-size: 12px; }
-    .shop-btn .icon { font-size: 22px; }
+    .shop-btn .cost { color: #ffcc00; font-size: 12px; font-weight: 700; }
+    .shop-btn .icon { font-size: 22px; line-height: 1; }
 
     .end-turn-btn {
-      width: 100%; min-height: 44px;
-      background: rgba(15, 52, 96, 0.92); border: 1px solid #4a6fa5;
-      border-radius: 6px; color: #ffffff; font-size: 15px; font-weight: 700;
-      cursor: pointer; transition: background 0.15s;
+      width: 100%;
+      min-height: 46px;
+      background: linear-gradient(135deg, rgba(15, 82, 186, 0.55), rgba(30, 144, 255, 0.55));
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(15, 82, 186, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
-    .end-turn-btn:active { background: rgba(26, 74, 128, 0.95); transform: scale(0.97); }
+    .end-turn-btn:hover {
+      background: linear-gradient(135deg, rgba(15, 82, 186, 0.7), rgba(30, 144, 255, 0.7));
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 6px 20px rgba(15, 82, 186, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+    .end-turn-btn:active {
+      transform: scale(0.97);
+    }
 
     .hint-text {
-      font-size: 11px; color: #88aacc; text-align: center;
-      line-height: 1.4; padding: 0 4px;
+      font-size: 11px;
+      color: #88aacc;
+      text-align: center;
+      line-height: 1.5;
+      padding: 0 4px;
+      font-weight: 400;
     }
     .message-overlay {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      font-size: 20px; font-weight: 700; color: #ffcc00;
-      text-shadow: 0 0 6px #000, 0 0 12px #000;
-      pointer-events: none; opacity: 0; transition: opacity 0.3s;
-      text-align: center; z-index: 20;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      font-size: 22px;
+      font-weight: 900;
+      color: #ffcc00;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-align: center;
+      z-index: 20;
+      background: rgba(10, 15, 30, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px 32px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     }
 
     /* ── Portrait: panel to bottom ── */
     @media (orientation: portrait) {
       .side-panel {
-        right: 8px; left: 8px; top: auto; bottom: 6px;
-        width: auto; max-height: 240px;
+        right: 12px; left: 12px; top: auto; bottom: 12px;
+        width: auto !important; height: auto !important;
+        max-height: 240px; padding: 12px; gap: 8px;
       }
       .shop-grid {
-        flex-direction: row; flex-wrap: wrap; gap: 4px;
+        flex-direction: row; flex-wrap: wrap; gap: 6px;
+        max-height: none; overflow-y: visible; padding-right: 0;
       }
       .shop-btn {
-        flex: 1 1 auto; min-width: 100px; min-height: 40px;
-        font-size: 12px; padding: 4px 8px;
+        flex: 1 1 calc(50% - 3px);
+        min-width: 100px; min-height: 42px;
+        font-size: 12px; padding: 4px 10px;
       }
       .shop-btn .icon { font-size: 18px; }
-      .end-turn-btn { min-height: 40px; font-size: 13px; }
+      .end-turn-btn { min-height: 42px; font-size: 13px; }
     }
 
     @media (max-width: 500px) {
-      .side-panel { right: 4px; left: 4px; }
+      .side-panel { right: 8px; left: 8px; }
       .shop-btn .name { font-size: 11px; }
       .gold-card { font-size: 12px; padding: 6px 8px; }
     }
   </style>
-  <script type="module" crossorigin src="/chess-wars-pages/assets/index-mZJPpQbP.js"></script>
+  <script type="module" crossorigin src="/chess-wars-pages/assets/index-n0QMHKeO.js"></script>
 </head>
 <body>
   <div id="game-container"></div>
