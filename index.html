@@ -197,7 +197,7 @@
     }
     .message-overlay {
       position: absolute;
-      top: 50%;
+      top: 25%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.9);
       font-size: 22px;
@@ -286,8 +286,78 @@
       .side-panel { right: 8px; left: 8px; }
       .gold-card { font-size: 12px; padding: 6px 8px; }
     }
+
+    /* ── Modal Overlays ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(10, 15, 30, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 30;
+      justify-content: center; align-items: center;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal-content {
+      background: rgba(18, 22, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 420px; width: 90%;
+      max-height: 80vh; overflow-y: auto;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+    }
+    .modal-title {
+      text-align: center; color: #ffcc00; font-size: 22px;
+      margin-bottom: 16px; font-weight: 900;
+    }
+    .modal-tabs {
+      display: flex; gap: 6px; margin-bottom: 16px;
+    }
+    .modal-tab {
+      flex: 1; padding: 8px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+      color: #aaa; font-size: 12px; font-weight: 700; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .modal-tab.active, .modal-tab:hover {
+      background: rgba(0, 102, 170, 0.3); color: #fff;
+      border-color: rgba(0, 153, 221, 0.5);
+    }
+    .modal-body { color: #ddeedd; font-size: 13px; line-height: 1.7; }
+    .modal-tab-content { display: none; }
+    .modal-tab-content.active { display: block; }
+    .modal-tab-content h3 {
+      color: #ffa726; font-size: 15px; margin-bottom: 8px;
+    }
+    .modal-close-btn {
+      display: block; margin: 16px auto 0; width: 100%;
+      padding: 10px; background: rgba(51,51,51,0.8);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+      color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+    .modal-close-btn:hover {
+      background: rgba(85,85,85,0.8);
+    }
+
+    /* ── Promotion Modal ── */
+    .promotion-content { max-width: 320px; text-align: center; }
+    .promotion-content h2 { color: #ffcc00; margin-bottom: 16px; }
+    .promotion-buttons {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .promo-btn {
+      padding: 12px; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
+      color: #fff; font-size: 18px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .promo-btn:hover {
+      background: rgba(0, 153, 221, 0.25);
+      border-color: rgba(0, 153, 221, 0.5);
+    }
   </style>
-  <script type="module" crossorigin src="/chess-wars-pages/assets/index-DOlsYf5J.js"></script>
+  <script type="module" crossorigin src="/chess-wars-pages/assets/index-B8l_FkC-.js"></script>
 </head>
 <body>
   <div id="game-container"></div>
@@ -315,6 +385,55 @@
     </div>
 
     <div id="message-overlay" class="message-overlay"></div>
+
+    <!-- How to Play Modal -->
+    <div id="how-to-play-modal" class="modal-overlay">
+      <div class="modal-content">
+        <h2 class="modal-title">HOW TO PLAY</h2>
+        <div class="modal-tabs">
+          <button class="modal-tab active" data-tab="0">DEPLOY</button>
+          <button class="modal-tab" data-tab="1">VISION</button>
+          <button class="modal-tab" data-tab="2">TACTICS</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-tab-content active" data-tab="0">
+            <h3>COSTS & DEPLOYMENTS</h3>
+            <p>• Start Setup phase with $800 to buy and deploy units.</p>
+            <p>• Unit costs: Pawn $100, Knight/Bishop $300, Rook $500, Queen $900.</p>
+            <p>• Each turn, you can EITHER Move/Attack OR Deploy a shop unit.</p>
+            <p>• Deployed pieces cannot be moved on the same turn they are placed.</p>
+          </div>
+          <div class="modal-tab-content" data-tab="1">
+            <h3>FOG OF WAR & VISION</h3>
+            <p>• The board is covered in fog. You can only see squares within the vision range of your own pieces.</p>
+            <p>• Vision Ranges:</p>
+            <p>  - Rook: 3 squares (excellent scout!)</p>
+            <p>  - Queen, Knight, Bishop, Pawn, King: 1 square</p>
+            <p>• Hidden enemy pieces in the fog are completely invisible.</p>
+          </div>
+          <div class="modal-tab-content" data-tab="2">
+            <h3>AMBUSHES & KINGS</h3>
+            <p>• AMBUSH: If a sliding unit (Rook, Bishop, Queen) moves through a hidden enemy square, it is blocked, stopped, and loses its turn!</p>
+            <p>• KING SPAWN: The King starts off-board and automatically spawns randomly in your deploy zone on Turn 5.</p>
+            <p>• FOG CHECK: Check only triggers if the attacker is visible in your fog. You can escape check using visible information.</p>
+          </div>
+        </div>
+        <button id="how-to-play-close" class="modal-close-btn">CLOSE</button>
+      </div>
+    </div>
+
+    <!-- Pawn Promotion Modal -->
+    <div id="promotion-modal" class="modal-overlay">
+      <div class="modal-content promotion-content">
+        <h2>Promote Pawn</h2>
+        <div class="promotion-buttons">
+          <button class="promo-btn" data-piece="queen">&#9819; Queen</button>
+          <button class="promo-btn" data-piece="rook">&#9820; Rook</button>
+          <button class="promo-btn" data-piece="bishop">&#9821; Bishop</button>
+          <button class="promo-btn" data-piece="knight">&#9822; Knight</button>
+        </div>
+      </div>
+    </div>
   </div>
 
 </body>
