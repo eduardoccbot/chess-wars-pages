@@ -80,6 +80,12 @@
       padding: 14px;
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
+    .side-panel-top-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
     .gold-card {
       background: rgba(255, 204, 0, 0.08);
       border: 1px solid rgba(255, 204, 0, 0.2);
@@ -217,28 +223,71 @@
       .side-panel {
         right: 12px; left: 12px; top: auto; bottom: 12px;
         width: auto !important; height: auto !important;
-        max-height: 240px; padding: 12px; gap: 8px;
+        max-height: 160px !important; padding: 8px 10px; gap: 6px;
+        display: flex;
+        flex-direction: column;
+      }
+      .side-panel-top-row {
+        flex-direction: row;
+        gap: 8px;
+      }
+      .side-panel-top-row .gold-card {
+        flex: 1;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        padding: 4px 8px;
+      }
+      .side-panel-top-row .end-turn-btn {
+        flex: 1.2;
+        min-height: 38px;
+        padding: 4px 8px;
+        margin: 0;
       }
       .shop-grid {
-        flex-direction: row; flex-wrap: wrap; gap: 6px;
-        max-height: none; overflow-y: visible; padding-right: 0;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 4px;
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+        width: 100%;
       }
       .shop-btn {
-        flex: 1 1 calc(50% - 3px);
-        min-width: 100px; min-height: 42px;
-        font-size: 12px; padding: 4px 10px;
+        flex: 1;
+        min-width: 0;
+        min-height: 44px;
+        padding: 4px 2px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1px;
       }
-      .shop-btn .icon { font-size: 18px; }
-      .end-turn-btn { min-height: 42px; font-size: 13px; }
+      .shop-btn .name {
+        display: none;
+      }
+      .shop-btn .icon {
+        font-size: 20px;
+        line-height: 1;
+      }
+      .shop-btn .cost {
+        font-size: 10px;
+      }
+      .hint-text {
+        font-size: 10px;
+        line-height: 1.2;
+        margin-top: 1px;
+      }
     }
 
     @media (max-width: 500px) {
       .side-panel { right: 8px; left: 8px; }
-      .shop-btn .name { font-size: 11px; }
       .gold-card { font-size: 12px; padding: 6px 8px; }
     }
   </style>
-  <script type="module" crossorigin src="/chess-wars-pages/assets/index-DURywP8c.js"></script>
+  <script type="module" crossorigin src="/chess-wars-pages/assets/index-B8LHZBuu.js"></script>
 </head>
 <body>
   <div id="game-container"></div>
@@ -251,7 +300,10 @@
     </div>
 
     <div class="side-panel">
-      <div id="ui-gold-card" class="gold-card">Gold: 800</div>
+      <div class="side-panel-top-row">
+        <div id="ui-gold-card" class="gold-card">Gold: 800</div>
+        <button id="end-turn-btn" class="end-turn-btn">End Turn</button>
+      </div>
       <div class="shop-grid" id="shop-grid">
         <button class="shop-btn" data-type="pawn"><span class="name">Pawn</span><span class="cost">100g</span><span class="icon">&#9823;</span></button>
         <button class="shop-btn" data-type="knight"><span class="name">Knight</span><span class="cost">300g</span><span class="icon">&#9822;</span></button>
@@ -259,7 +311,6 @@
         <button class="shop-btn" data-type="rook"><span class="name">Rook</span><span class="cost">500g</span><span class="icon">&#9820;</span></button>
         <button class="shop-btn" data-type="queen"><span class="name">Queen</span><span class="cost">900g</span><span class="icon">&#9819;</span></button>
       </div>
-      <button id="end-turn-btn" class="end-turn-btn">End Turn</button>
       <p id="ui-hint" class="hint-text">Select a piece to move/attack<br>or buy a new piece to deploy</p>
     </div>
 
