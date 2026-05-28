@@ -161,7 +161,7 @@
     }
     .shop-btn .name { font-weight: 600; }
     .shop-btn .cost { color: #ffcc00; font-size: 12px; font-weight: 700; }
-    .shop-btn .icon { font-size: 22px; line-height: 1; }
+    .shop-btn .icon { width: 22px; height: 22px; flex-shrink: 0; }
 
     .end-turn-btn {
       width: 100%;
@@ -269,8 +269,8 @@
         display: none;
       }
       .shop-btn .icon {
-        font-size: 20px;
-        line-height: 1;
+        width: 18px;
+        height: 18px;
       }
       .shop-btn .cost {
         font-size: 10px;
@@ -380,7 +380,7 @@
       color: rgba(255, 255, 255, 0.55);
     }
   </style>
-  <script type="module" crossorigin src="/assets/index-HedbKsMR.js"></script>
+  <script type="module" crossorigin src="/assets/index-BucMdm1c.js"></script>
 </head>
 <body>
   <div id="game-container"></div>
@@ -398,11 +398,11 @@
         <button id="end-turn-btn" class="end-turn-btn">End Turn</button>
       </div>
       <div class="shop-grid" id="shop-grid">
-        <button class="shop-btn" data-type="pawn"><span class="name">Pawn</span><span class="cost">$100</span><span class="icon">&#9823;</span></button>
-        <button class="shop-btn" data-type="bishop"><span class="name">Bishop</span><span class="cost">$300</span><span class="icon">&#9821;</span></button>
-        <button class="shop-btn" data-type="knight"><span class="name">Knight</span><span class="cost">$400</span><span class="icon">&#9822;</span></button>
-        <button class="shop-btn" data-type="rook"><span class="name">Rook</span><span class="cost">$500</span><span class="icon">&#9820;</span></button>
-        <button class="shop-btn" data-type="queen"><span class="name">Queen</span><span class="cost">$700</span><span class="icon">&#9819;</span></button>
+        <button class="shop-btn" data-type="pawn"><span class="name">Pawn</span><span class="cost">$100</span><img class="icon" src="pieces/white_pawn.svg" alt="Pawn" width="22" height="22"></button>
+        <button class="shop-btn" data-type="bishop"><span class="name">Bishop</span><span class="cost">$300</span><img class="icon" src="pieces/white_bishop.svg" alt="Bishop" width="22" height="22"></button>
+        <button class="shop-btn" data-type="knight"><span class="name">Knight</span><span class="cost">$400</span><img class="icon" src="pieces/white_knight.svg" alt="Knight" width="22" height="22"></button>
+        <button class="shop-btn" data-type="rook"><span class="name">Rook</span><span class="cost">$500</span><img class="icon" src="pieces/white_rook.svg" alt="Rook" width="22" height="22"></button>
+        <button class="shop-btn" data-type="queen"><span class="name">Queen</span><span class="cost">$700</span><img class="icon" src="pieces/white_queen.svg" alt="Queen" width="22" height="22"></button>
       </div>
       <p id="ui-hint" class="hint-text">Select a piece to move/attack<br>or buy a new piece to deploy</p>
     </div>
@@ -451,10 +451,10 @@
     <div class="modal-content promotion-content">
       <h2>Promote Pawn</h2>
       <div class="promotion-buttons">
-        <button class="promo-btn" data-piece="queen">&#9819; Queen</button>
-        <button class="promo-btn" data-piece="rook">&#9820; Rook</button>
-        <button class="promo-btn" data-piece="bishop">&#9821; Bishop</button>
-        <button class="promo-btn" data-piece="knight">&#9822; Knight</button>
+        <button class="promo-btn" data-piece="queen"><img src="pieces/white_queen.svg" alt="Queen" width="24" height="24"> Queen</button>
+        <button class="promo-btn" data-piece="rook"><img src="pieces/white_rook.svg" alt="Rook" width="24" height="24"> Rook</button>
+        <button class="promo-btn" data-piece="bishop"><img src="pieces/white_bishop.svg" alt="Bishop" width="24" height="24"> Bishop</button>
+        <button class="promo-btn" data-piece="knight"><img src="pieces/white_knight.svg" alt="Knight" width="24" height="24"> Knight</button>
       </div>
     </div>
   </div>
